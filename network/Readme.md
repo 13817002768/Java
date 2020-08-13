@@ -16,37 +16,69 @@
     <type>pom</type>
 </dependency>
 
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>1.3.2</version>
-</dependency>
 ```
 
 
 
+上传文件
+
 ```java
+String url = "https://www.xxx.com"
 public static void uploadFile(String url){
-        File f = new File("C://Users/lyz/Desktop/123.txt");
+    File f = new File("C://Users/lyz/Desktop/123.txt");
 
-        try{
-            HttpClient client = new HttpClient();
-            Credentials creds = new UsernamePasswordCredentials("username", "password");
-            client.getState().setCredentials(AuthScope.ANY, creds);
+    try{
+        HttpClient client = new HttpClient();
+        Credentials creds = new UsernamePasswordCredentials("username", "password");
+        client.getState().setCredentials(AuthScope.ANY, creds);
 
-            PutMethod method = new PutMethod(url + "/" + f.getName());
-            RequestEntity requestEntity = new InputStreamRequestEntity(
-                    new FileInputStream(f));
-            method.setRequestEntity(requestEntity);
-            client.executeMethod(method);
-            System.out.println(method.getStatusCode() + " " + method.getStatusText());
-        }
-        catch(HttpException ex){
-            // Handle Exception
-        }
-        catch(IOException ex){
-            // Handle Exception
-        }
+        PutMethod method = new PutMethod(url + "/" + f.getName());
+        RequestEntity requestEntity = new InputStreamRequestEntity(
+                new FileInputStream(f));
+        method.setRequestEntity(requestEntity);
+        client.executeMethod(method);
+        System.out.println(method.getStatusCode() + " " + method.getStatusText());
     }
+    catch(HttpException ex){
+        // Handle Exception
+    }
+    catch(IOException ex){
+        // Handle Exception
+    }
+}
+```
+
+下载文件
+
+```java
+String url = "https://www.xxx.com/test.txt"
+public static void downloadFile(String url){
+    File f = new File("C://Users/lyz/Desktop/123.txt");
+
+    try{
+        HttpClient client = new HttpClient();
+        Credentials creds = new UsernamePasswordCredentials("admin", "1qazXSW@");
+        client.getState().setCredentials(AuthScope.ANY, creds);
+
+        GetMethod method = new GetMethod(url);
+        //PutMethod method = new PutMethod(url + "/" + f.getName());
+
+        client.executeMethod(method);
+
+        System.out.println(method.getStatusCode() + " " + method.getStatusText());
+        System.out.println(method.getResponseBody());
+        String s = method.getResponseBodyAsString();
+        FileOutputStream outputStream = new FileOutputStream("1234.txt");
+        outputStream.write(s.getBytes());
+        outputStream.close();
+
+    }
+    catch(HttpException ex){
+        // Handle Exception
+    }
+    catch(IOException ex){
+        // Handle Exception
+    }
+}
 ```
 
